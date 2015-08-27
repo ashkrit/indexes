@@ -4,10 +4,9 @@ import com.googlecode.concurrenttrees.radix.node.concrete.DefaultCharArrayNodeFa
 import com.googlecode.concurrenttrees.suffix.ConcurrentSuffixTree;
 import com.googlecode.concurrenttrees.suffix.SuffixTree;
 import gnu.trove.list.array.TIntArrayList;
-import playground.index.ArrayListDataRepository;
-import playground.index.DataIndex;
-import playground.index.RowCallback;
-import playground.index.ValueExtractor;
+import playground.index.api.DataIndex;
+import playground.index.api.RowCallback;
+import playground.index.api.ValueExtractor;
 
 
 public class ContainsDataIndex<T> implements DataIndex<T> {

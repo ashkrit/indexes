@@ -2,10 +2,9 @@ package playground.index.impl;
 
 
 import gnu.trove.list.array.TIntArrayList;
-import playground.index.ArrayListDataRepository;
-import playground.index.DataIndex;
-import playground.index.RowCallback;
-import playground.index.ValueExtractor;
+import playground.index.api.DataIndex;
+import playground.index.api.RowCallback;
+import playground.index.api.ValueExtractor;
 
 import java.util.HashMap;
 import java.util.Map;

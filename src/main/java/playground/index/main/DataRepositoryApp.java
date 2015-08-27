@@ -1,10 +1,10 @@
 package playground.index.main;
 
 
-import playground.index.ArrayListDataRepository;
-import playground.index.DataIndex;
-import playground.index.RowCallback;
-import playground.index.ValueExtractor;
+import playground.index.api.DataIndex;
+import playground.index.api.RowCallback;
+import playground.index.api.ValueExtractor;
+import playground.index.impl.ArrayListDataRepository;
 import playground.index.impl.ContainsDataIndex;
 import playground.index.impl.HashDataIndex;
 import playground.index.impl.TreeDataIndex;

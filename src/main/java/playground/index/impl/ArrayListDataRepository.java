@@ -1,5 +1,9 @@
-package playground.index;
+package playground.index.impl;
 
+
+import playground.index.api.DataIndex;
+import playground.index.api.DataRepository;
+import playground.index.api.RowCallback;
 
 import java.util.ArrayList;
 import java.util.List;

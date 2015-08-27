@@ -1,4 +1,4 @@
-package playground.index;
+package playground.index.api;
 
 
 public interface DataRepository<T> {
