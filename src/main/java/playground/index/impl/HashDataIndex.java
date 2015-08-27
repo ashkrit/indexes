@@ -2,8 +2,8 @@ package playground.index.impl;
 
 
 import gnu.trove.list.array.TIntArrayList;
+import playground.index.ArrayListDataRepository;
 import playground.index.DataIndex;
-import playground.index.DataRepository;
 import playground.index.RowCallback;
 import playground.index.ValueExtractor;
 
@@ -13,7 +13,7 @@ import java.util.Map;
 public class HashDataIndex<T> implements DataIndex<T> {
 
     private final ValueExtractor<T> extractor;
-    private final Map<Object, TIntArrayList> indexValues = new HashMap<>();
+    private final Map<Object, TIntArrayList> indexData = new HashMap<>();
 
     public HashDataIndex(ValueExtractor<T> extractor) {
         this.extractor = extractor;
@@ -27,18 +27,23 @@ public class HashDataIndex<T> implements DataIndex<T> {
     @Override
     public void add(int rowNumber, T row) {
         Object key = extractor.extract(row);
-        TIntArrayList rowIds = indexValues.get(key);
-        if (rowIds == null) {
-            rowIds = new TIntArrayList();
-            indexValues.put(key, rowIds);
-        }
+        TIntArrayList rowIds = addIfAbsent(key);
         rowIds.add(rowNumber);
     }
 
-    @Override
-    public void search(DataRepository<T> repository, Object key, RowCallback<T> rowCallback) {
+    private TIntArrayList addIfAbsent(Object key) {
+        TIntArrayList rowIds = indexData.get(key);
+        if (rowIds == null) {
+            rowIds = new TIntArrayList();
+            indexData.put(key, rowIds);
+        }
+        return rowIds;
+    }
 
-        TIntArrayList rowIds = indexValues.get(key);
+    @Override
+    public void search(ArrayListDataRepository<T> repository, Object key, RowCallback<T> rowCallback) {
+
+        TIntArrayList rowIds = indexData.get(key);
 
         if (rowIds != null) {
             rowIds.forEach(value -> {

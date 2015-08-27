@@ -1,8 +1,8 @@
 package playground.index.main;
 
 
+import playground.index.ArrayListDataRepository;
 import playground.index.DataIndex;
-import playground.index.DataRepository;
 import playground.index.RowCallback;
 import playground.index.ValueExtractor;
 import playground.index.impl.ContainsDataIndex;
@@ -21,7 +21,7 @@ public class DataRepositoryApp {
         DataIndex<PageHit> dateIndex = new TreeDataIndex<>(makeIndexValueExtractor("date", row -> row.hitTime));
         DataIndex<PageHit> containsBrowser = new ContainsDataIndex<>(makeIndexValueExtractor("containsbrowser", row -> row.browser));
 
-        DataRepository<PageHit> pageHitRepository = new DataRepository<>(Arrays.asList(browserIndex, dateIndex, containsBrowser));
+        ArrayListDataRepository<PageHit> pageHitRepository = new ArrayListDataRepository<>(Arrays.asList(browserIndex, dateIndex, containsBrowser));
 
         pageHitRepository.insert(new PageHit("www.google.com", new Date(System.currentTimeMillis()), "Singapore", "Chrome 44", "Windows8", "laptop"));
         pageHitRepository.insert(new PageHit("www.yahoo.com", new Date(System.currentTimeMillis()), "Singapore", "IE 11", "Windows8", "laptop"));

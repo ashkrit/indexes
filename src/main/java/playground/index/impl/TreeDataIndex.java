@@ -2,8 +2,8 @@ package playground.index.impl;
 
 
 import gnu.trove.list.array.TIntArrayList;
+import playground.index.ArrayListDataRepository;
 import playground.index.DataIndex;
-import playground.index.DataRepository;
 import playground.index.RowCallback;
 import playground.index.ValueExtractor;
 
@@ -13,7 +13,7 @@ import java.util.TreeMap;
 public class TreeDataIndex<T> implements DataIndex<T> {
 
     private final ValueExtractor<T> extractor;
-    private final TreeMap<Comparable, TIntArrayList> indexValues = new TreeMap<>();
+    private final TreeMap<Comparable, TIntArrayList> indexData = new TreeMap<>();
 
     public TreeDataIndex(ValueExtractor<T> extractor) {
         this.extractor = extractor;
@@ -28,33 +28,42 @@ public class TreeDataIndex<T> implements DataIndex<T> {
     @Override
     public void add(int rowNumber, T row) {
         Comparable key = (Comparable) extractor.extract(row);
-        TIntArrayList rowIds = indexValues.get(key);
-        if (rowIds == null) {
-            rowIds = new TIntArrayList();
-            indexValues.put(key, rowIds);
-        }
+        TIntArrayList rowIds = addIfAbsent(key);
         rowIds.add(rowNumber);
     }
 
-    @Override
-    public void search(DataRepository<T> repository, Object key, RowCallback<T> rowCallback) {
-        Range range = (Range) key;
-        Map<Comparable, TIntArrayList> keys;
-        if (gt(range)) {
-            keys = indexValues.tailMap(range.start);
-        } else if (lt(range)) {
-            keys = indexValues.headMap(range.end);
-        } else {
-            keys = indexValues.tailMap(range.start).headMap(range.end);
+    private TIntArrayList addIfAbsent(Comparable key) {
+        TIntArrayList rowIds = indexData.get(key);
+        if (rowIds == null) {
+            rowIds = new TIntArrayList();
+            indexData.put(key, rowIds);
         }
+        return rowIds;
+    }
 
+    @Override
+    public void search(ArrayListDataRepository<T> repository, Object key, RowCallback<T> rowCallback) {
+        Range range = (Range) key;
+        Map<Comparable, TIntArrayList> keys = search(range);
         int rowCount = forEachRow(repository, rowCallback, keys);
         rowCallback.onComplete(rowCount);
 
 
     }
 
-    private int forEachRow(DataRepository<T> repository, RowCallback<T> rowCallback, Map<Comparable, TIntArrayList> gtValues) {
+    private Map<Comparable, TIntArrayList> search(Range range) {
+        Map<Comparable, TIntArrayList> keys;
+        if (gt(range)) {
+            keys = indexData.tailMap(range.start);
+        } else if (lt(range)) {
+            keys = indexData.headMap(range.end);
+        } else {
+            keys = indexData.tailMap(range.start).headMap(range.end);
+        }
+        return keys;
+    }
+
+    private int forEachRow(ArrayListDataRepository<T> repository, RowCallback<T> rowCallback, Map<Comparable, TIntArrayList> gtValues) {
         int rowCount = 0;
         for (TIntArrayList rowIds : gtValues.values()) {
             rowIds.forEach(rowId -> {
