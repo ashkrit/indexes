@@ -32,8 +32,10 @@ public class SearchIndexBuilder {
                     try {
                         Document doc = new Document();
                         doc.add(new StringField("id", row[0], Field.Store.YES));
-                        doc.add(new TextField("contents", row[1], Field.Store.NO));
                         doc.add(new TextField("desc", row[1], Field.Store.YES));
+
+                        doc.add(new TextField("contents", row[1], Field.Store.NO));
+
                         System.out.println("Indexing " + record.incrementAndGet() + "\t" + row[0]);
                         indexWriter.addDocument(doc);
 
